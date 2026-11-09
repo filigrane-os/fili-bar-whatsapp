@@ -5,3 +5,4 @@ side = "right"
 order = 3
 runs = ["bar-alert"]
 autostart = ["./bin/wa-daemon", "./bin/wa-call-float"]
+packages = ["socat", "go"]

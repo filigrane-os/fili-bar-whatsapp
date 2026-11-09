@@ -16,6 +16,7 @@ printf '#!/bin/sh\necho "bar-alert $*" >> "$LOG"\n' > "$HOME_T/.local/bin/bar-al
 
 common_checks() {
     check "manifest has a title and api = 1" 'grep -q "^title = " "$ROOT/module.toml" && grep -q "^api = 1" "$ROOT/module.toml"'
+    check "manifest lists its xbps packages" 'grep -q "^packages = \[" "$ROOT/module.toml"'
     check "config.example.toml exists" '[ -f "$ROOT/config.example.toml" ]'
     check ".gitignore keeps personal files out" 'grep -q "^config.toml" "$ROOT/.gitignore" && grep -q "^\*.url" "$ROOT/.gitignore" && grep -q "^\*.conf" "$ROOT/.gitignore"'
     bad=""
