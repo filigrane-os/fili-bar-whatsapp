@@ -10,7 +10,7 @@ while IFS= read -r line <&"${WA[0]}"; do
         sleep 8   # let the first sync record the session
         kill "$WA_PID" 2>/dev/null
         touch "$cfg/paired"
-        echo "Appairé. Lancer wa-daemon (ou relancer niri)."
+        echo "Paired. Start wa-daemon (or restart niri)."
         exit 0
     fi
 done
