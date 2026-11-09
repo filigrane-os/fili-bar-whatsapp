@@ -1,0 +1,13 @@
+#!/bin/sh
+# WhatsApp without a browser: whatsapp-unreadd (Go daemon, ~23 MB) restarted if it falls, plus wa-count which reports the
+# unread counter into the bar. Waits for the pairing (wa-pair, once). Its notifications go through webapp-notify.
+# Started by niri at login.
+exec 9>"${XDG_RUNTIME_DIR:-/tmp}/wa-daemon.lock"
+flock -n 9 || exit 0
+until [ -e "$HOME/.config/whatsapp-unread/paired" ]; do sleep 30; done
+"$(dirname "$(readlink -f "$0")")/wa-count" &
+trap 'kill $! 2>/dev/null; exit' TERM INT
+while :; do
+    "$HOME/.local/bin/whatsapp-unreadd" >/dev/null 2>&1
+    sleep 10
+done

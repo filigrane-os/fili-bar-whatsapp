@@ -1,0 +1,13 @@
+#!/bin/sh
+# Makes the "WhatsApp call" window float: its title arrives after the opening,
+# so open-floating (window-rule) does not see it. Follows the niri event stream.
+niri msg --json event-stream | jq --unbuffered -r '
+  .WindowOpenedOrChanged.window // empty
+  | select((.app_id // "") | test("^chrome-web\\.whatsapp\\.com__"))
+  | select((.title // "") | startswith("Appel WhatsApp"))
+  | select(.is_floating | not) | .id' |
+while read -r id; do
+    niri msg action move-window-to-floating --id "$id"
+    niri msg action set-window-width --id "$id" 480
+    niri msg action set-window-height --id "$id" 640
+done

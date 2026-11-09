@@ -1,0 +1,18 @@
+#!/bin/bash
+# One-time pairing of whatsapp-unreadd: shows the QR code to scan (WhatsApp > Linked devices > Link a device),
+# stops once paired and creates the marker that allows wa-daemon. Run it in a terminal: foot -e wa-pair
+cfg="$HOME/.config/whatsapp-unread"
+mkdir -p -m 700 "$cfg"
+coproc WA { exec "$HOME/.local/bin/whatsapp-unreadd" -socket "${XDG_RUNTIME_DIR:-/tmp}/wa-pair.sock" 2>&1; }
+while IFS= read -r line <&"${WA[0]}"; do
+    printf '%s\n' "$line"
+    if [[ $line == *"Pairing successful"* ]]; then
+        sleep 8   # let the first sync record the session
+        kill "$WA_PID" 2>/dev/null
+        touch "$cfg/paired"
+        echo "Appairé. Lancer wa-daemon (ou relancer niri)."
+        exit 0
+    fi
+done
+echo "Appairage interrompu." >&2
+exit 1

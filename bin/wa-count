@@ -1,0 +1,11 @@
+#!/bin/sh
+# Relay of the unread counter of whatsapp-unreadd (Unix socket, one line per change) to the bar:
+# writes ~/.local/state/alerts/whatsapp.count, re-read at once by the bar (AlertModule). Restarted by wa-daemon.
+out="$HOME/.local/state/alerts/whatsapp.count"
+mkdir -p "${out%/*}"
+while :; do
+    socat -u "UNIX-CONNECT:${XDG_RUNTIME_DIR:-/tmp}/whatsapp-unreadd.sock" - 2>/dev/null | while IFS= read -r n; do
+        echo "$n" >"$out"
+    done
+    sleep 5
+done

@@ -1,0 +1,16 @@
+#!/bin/sh
+# Builds whatsapp-unreadd (Go) from a pinned commit into ~/.local/opt and links it in ~/.local/bin. Needs git and go.
+set -eu
+COMMIT="44a1688cb55d93236e886d242cc008ff8c3cbfa9"
+dir="$HOME/.local/opt/whatsapp-unreadd-$(printf %.7s "$COMMIT")"
+if [ ! -x "$dir/whatsapp-unreadd" ]; then
+    command -v go >/dev/null || { echo "go is required" >&2; exit 1; }
+    src="$(mktemp -d)"; trap 'rm -rf "$src"' EXIT
+    git clone -q https://github.com/m-brl/whatsapp-unreadd "$src"
+    git -C "$src" checkout -q "$COMMIT"
+    mkdir -p "$dir"
+    (cd "$src" && CGO_ENABLED=0 GOFLAGS=-mod=readonly go build -trimpath -ldflags='-s -w' -o "$dir/whatsapp-unreadd" .)
+fi
+mkdir -p "$HOME/.local/bin"
+ln -sfn "$dir/whatsapp-unreadd" "$HOME/.local/bin/whatsapp-unreadd"
+echo "built. Pair once with: foot -e $(dirname "$(readlink -f "$0")")/wa-pair"
