@@ -20,4 +20,3 @@ if [ ! -e "$HOME/.config/whatsapp-unread/paired" ]; then
         echo "pairing needed: foot -e $here/bin/wa-pair"
     fi
 fi
-echo "autostart: $here/bin/wa-daemon and $here/bin/wa-call-float at login"

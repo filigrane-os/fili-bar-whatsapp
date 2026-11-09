@@ -8,7 +8,7 @@ fili-bar install https://github.com/filigrane-os/fili-bar-whatsapp
 foot -e ~/.local/share/filigrane/bar/plugins/whatsapp/bin/wa-pair   # once: scan the QR code
 ```
 
-Start `bin/wa-daemon` at login (niri `spawn-at-startup`). The pairing is stored in `~/.config/whatsapp-unread/`, outside this repository.
+The daemon starts at login by itself (`autostart` in `module.toml`, run by niri through `fili-bar autostart`).
 
 `fili-bar install` also runs `install.sh`: it creates your options file from `config.example.toml`, asks for what is missing (credentials go to the keyring or to a file under `~/.config`, never to this folder) and prints what is left to do. Run it again with `fili-bar setup whatsapp`; it is safe to repeat.
 
