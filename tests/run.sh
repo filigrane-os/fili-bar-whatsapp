@@ -14,4 +14,7 @@ check "install-daemon pins a commit" 'grep -Eq "^COMMIT=\"[0-9a-f]{40}\"" "$ROOT
 check "install.sh asks for the pairing only when it is missing" 'grep -q "wa-pair" "$ROOT/install.sh" && grep -q "paired" "$ROOT/install.sh"'
 check "manifest autostarts the daemons" 'grep -q "^autostart = .*wa-daemon" "$ROOT/module.toml"'
 
+check "extras: the fallback app menu is valid JSON" 'for f in "$ROOT"/extras/config/filigrane/appmenu/*.json; do jq -e .menus "$f" > /dev/null || exit 1; done'
+check "extras: no personal data" '! grep -rEiq "@[a-z0-9-]+[.][a-z]|/home/[a-z]" "$ROOT/extras"'
+
 exit "$fail"

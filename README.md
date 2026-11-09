@@ -27,3 +27,7 @@ sh tests/run.sh
 ```
 
 No network and no real account: the external commands (`notify-send`, `secret-tool`, `rclone`, `ip`...) are stubs and `HOME` is a temporary folder. The checks every plugin passes (manifest, scripts parse, no personal data in the repository, `install.sh` idempotent) are in `tests/common.sh`; GitHub Actions runs them on each push.
+
+## Extras
+
+`extras/config/` ships the fallback menu of the web app and its icon; `fili-bar install` links them into `~/.config` (never over your own files).
